@@ -221,3 +221,4 @@ task installAll(type: Install) {
 
 apply from: "gradle/intTestImage.gradle"
 apply from: 'gradle/pullRequestBuild.gradle'
+apply from: 'gradle/ci.gradle'

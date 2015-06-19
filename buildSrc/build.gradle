@@ -40,6 +40,7 @@ dependencies {
     //it's built from sources at: https://github.com/szczepiq/jarjar
     //if code changes are needed in this library we need to figure out a better way of distributing them.
     compile "org.gradle.jarjar:jarjar:1.2.1"
+    compile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.2'
 }
 apply from: '../gradle/compile.gradle'
 apply from: '../gradle/taskOrdering.gradle'
