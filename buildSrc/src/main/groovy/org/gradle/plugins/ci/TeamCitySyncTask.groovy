@@ -16,18 +16,14 @@
 
 package org.gradle.plugins.ci
 
-import org.gradle.util.ConfigureUtil
+import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.TaskAction
 
-class TeamCityExtension {
-    String baseUrl
-    String username
-    String password
-    String rootProjectId
-    List<BuildProject> buildProjects = []
+class TeamCitySyncTask extends DefaultTask {
 
-    def buildProjec(Closure closure) {
-        BuildProject buildProject = new BuildProject()
-        ConfigureUtil.configure(closure, buildProject)
-        buildProjects << buildProject
+    @TaskAction
+    def doConfig() {
+        TeamCityExtension teamCityExtension = project.teamCity
+        TeamCityApi.applyFromTemplate(teamCityExtension)
     }
 }

@@ -19,65 +19,24 @@ package org.gradle.plugins.ci
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
-import static groovyx.net.http.ContentType.*
-
 class TeamCityJobPlugin implements Plugin<Project> {
     @Override
     void apply(Project project) {
         project.extensions.create("teamCity", TeamCityExtension)
+        project.task('syncTeamCityConfig', type: TeamCitySyncTask)
 
-        project.task('printTC') << {
+        project.task('printTeamCityConfig') << {
             TeamCityExtension teamCityExtension = project.extensions.teamCity
-            BuildProject template = teamCityExtension.template
-
-            println "Template is: ${template.name}"
-            template.subProjects.each { BuildProject p ->
-                println "SubProject is: ${p.name}"
-
+            teamCityExtension.buildProjects.each { BuildProject p ->
+                printBuildProject(p, 1)
             }
         }
     }
 
-    def httpHeaders = ["Accept": "application/json"]
-
-    def printProjects(client, resp) {
-        def project = resp.data
-        def projectIds = project.projects.project.collect { it.id }
-
-        project.projects.project.each {
-            println """
-        project{
-         "name": "$it.name"
-         "description": "$it.description"
-    """
-            projectIds.each {
-                def subResp = client.get(path: "projects/id:$it", headers: httpHeaders)
-                printProjects(client, subResp)
-            }
-
-            printBuildTypes(client, it.id)
-            println "}"
-        }
-    }
-
-
-    def printBuildTypes(client, projectId) {
-        def resp = client.get(path: "projects/$projectId/buildTypes", headers: httpHeaders)
-        def configs = resp.data.buildType
-
-//    https://builds.gradle.org/httpAuth/app/rest/projects/Gradle_Master_Checkpoints/buildTypes/id:Gradle_Master_Checkpoints_Stage0Foundation
-        configs.each {
-            println """
-        buildConfig{
-            vcsRootId: ""
-            settings: []
-            parameters: []
-            steps: []
-            snapshotDependencies: []
-            artifactDependencies:[]
-            agentRequirements: []
-        }
-        """
+    def printBuildProject(BuildProject buildProject, int depth) {
+        println "${'-' * depth} ${buildProject.name}"
+        buildProject.subProjects.each {
+            printBuildProject(it, depth + 1)
         }
     }
 }

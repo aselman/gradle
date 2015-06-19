@@ -1,30 +1,39 @@
 apply plugin: "teamcity"
 
 teamCity {
-    template {
+    baseUrl = 'http://localhost:8111'
+    username = System.getenv('TC_USERNAME')
+    password = System.getenv('TC_PASSWORD')
+    rootProjectId = '_root'
+
+    buildProjec {//TODO - AK  Purposely missing a 't' because the below each closure does not find  resolve the correct delegate
         name = "Gradle"
-        description = "Gradle Open-Source Project"
-        buildProject {
-            name = "Checkpoints"
-            description = "Configurations of the stages to getting a distribution that passes QA"
-        }
-        buildProject {
-            name = "Commit"
-            description = "Configurations for daily development"
-        }
-        buildProject {
-            name = "Compatibility"
-            description = "runs compatibility checks to ensure gradle is working with other systems"
-        }
-        buildProject {
-            name = "Coverage"
-            description = "Configurations that provide full test coverage on various platforms"
-        }
-        buildProject {
-            name = "Performance"
-            description = "Configurations that execute performance tests (to be run exclusively on a given machine)"
+        description = "Gradle open-source project"
+        ['master', 'release', 'teamcity-spike'].each { String branch ->
+            buildProject {
+                name = "$branch"
+                description = "$branch configurations"
+                buildProject {
+                    name = "Checkpoints"
+                    description = "Configurations of the stages to getting a distribution that passes QA"
+                }
+                buildProject {
+                    name = "Commit"
+                    description = "Configurations for daily development"
+                }
+                buildProject {
+                    name = "Compatibility"
+                    description = "runs compatibility checks to ensure gradle is working with other systems"
+                }
+                buildProject {
+                    name = "Coverage"
+                    description = "Configurations that provide full test coverage on various platforms"
+                }
+                buildProject {
+                    name = "Performance"
+                    description = "Configurations that execute performance tests (to be run exclusively on a given machine)"
+                }
+            }
         }
     }
-    
-    branches = ["teamcity-spike"]
 }

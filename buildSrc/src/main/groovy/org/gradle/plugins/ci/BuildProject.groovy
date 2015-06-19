@@ -20,7 +20,7 @@ import groovy.transform.ToString
 import org.gradle.util.ConfigureUtil
 
 @ToString
-class BuildProject {
+class BuildProject implements Parameterised {
     String name
     String description
     List<BuildProject> subProjects = []

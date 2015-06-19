@@ -16,18 +16,6 @@
 
 package org.gradle.plugins.ci
 
-import org.gradle.util.ConfigureUtil
-
-class TeamCityExtension {
-    String baseUrl
-    String username
-    String password
-    String rootProjectId
-    List<BuildProject> buildProjects = []
-
-    def buildProjec(Closure closure) {
-        BuildProject buildProject = new BuildProject()
-        ConfigureUtil.configure(closure, buildProject)
-        buildProjects << buildProject
-    }
+trait Parameterised {
+    Map<String, String> parameters
 }
