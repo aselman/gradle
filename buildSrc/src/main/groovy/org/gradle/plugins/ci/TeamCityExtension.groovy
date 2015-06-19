@@ -26,6 +26,7 @@ class TeamCityExtension {
     List<BuildProject> buildProjects = []
 
     def buildProjec(Closure closure) {
+        closure.resolveStrategy = 1
         BuildProject buildProject = new BuildProject()
         ConfigureUtil.configure(closure, buildProject)
         buildProjects << buildProject

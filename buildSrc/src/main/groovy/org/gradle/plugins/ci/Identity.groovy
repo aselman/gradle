@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package org.gradle.plugins.ci
+package org.gradle.plugins.ci;
 
-trait Parameterised {
-    List<Map<String, String>> configurationParameters
+trait Identity {
+    String name
+    String description
 }

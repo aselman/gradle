@@ -16,23 +16,5 @@
 
 package org.gradle.plugins.ci
 
-import groovy.transform.ToString
-import org.gradle.util.ConfigureUtil
-
-@ToString
-class BuildProject implements Parameterised, Identity {
-    List<BuildProject> subProjects = []
-    List<BuildType> buildTypes = []
-
-    def buildProject(Closure closure) {
-        BuildProject buildProject = new BuildProject()
-        ConfigureUtil.configure(closure, buildProject)
-        this.subProjects << buildProject
-    }
-
-    def buildType(Closure closure) {
-        BuildType buildType = new BuildType()
-        ConfigureUtil.configure(closure, buildType)
-        this.buildTypes << buildType
-    }
+class BuildType implements Identity{
 }

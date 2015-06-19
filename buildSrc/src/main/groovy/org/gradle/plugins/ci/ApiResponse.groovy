@@ -16,23 +16,16 @@
 
 package org.gradle.plugins.ci
 
-import groovy.transform.ToString
-import org.gradle.util.ConfigureUtil
+class ApiResponse {
+    String body
+    int status
 
-@ToString
-class BuildProject implements Parameterised, Identity {
-    List<BuildProject> subProjects = []
-    List<BuildType> buildTypes = []
 
-    def buildProject(Closure closure) {
-        BuildProject buildProject = new BuildProject()
-        ConfigureUtil.configure(closure, buildProject)
-        this.subProjects << buildProject
-    }
-
-    def buildType(Closure closure) {
-        BuildType buildType = new BuildType()
-        ConfigureUtil.configure(closure, buildType)
-        this.buildTypes << buildType
+    @Override
+    public String toString() {
+        return "ApiResponse{" +
+            "body='" + body + '\'' +
+            ", status=" + status +
+            '}';
     }
 }

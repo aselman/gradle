@@ -1,14 +1,33 @@
 apply plugin: "teamcity"
 
+def globalParams = [
+    ["name": "env.JAVA_HOME", "value": "%linux.java7.oracle.64bit%"],
+    ["name": "linux.java5.sun.32bit", "value": "/opt/jdk/sun-jdk-5"],
+    ["name": "linux.java6.ibm.64bit", "value": "/opt/jdk/ibm-jdk-6"],
+    ["name": "linux.java6.sun.64bit", "value": "/opt/jdk/sun-jdk-6"],
+    ["name": "linux.java7.oracle.64bit", "value": "/opt/jdk/oracle-jdk-7"],
+    ["name" : "linux.java8.oracle.64bit","value": "/opt/jdk/oracle-jdk-8"],
+    ["name" : "linux.java9.oracle.64bit","value": "/opt/jdk/oracle-jdk-9"],
+    ["name" : "system.locks.readLock.linux1ExclusiveUse","value": ""],
+    ["name" : "teamcity.agent.filecache.publishing.disabled","value": "true"],
+    ["name" : "teamcity.agent.filecache.size.limit.bytes","value": "524288000"],
+    ["name" : "windows.java5.sun.32bit","value": "C:\\Program Files (x86)\\Java\\jdk1.5.0_22"],
+    ["name" : "windows.java6.sun.64bit","value": "C:\\program files\\java\\jdk1.6.0_35"],
+    ["name" : "windows.java7.oracle.64bit","value": "C:\\Program Files\\Java\\jdk1.7.0_25"],
+    ["name" : "windows.java8.oracle.64bit","value": "C:\\Program Files\\Java\\jdk1.8"]
+]
 teamCity {
     baseUrl = 'http://localhost:8111'
     username = System.getenv('TC_USERNAME')
     password = System.getenv('TC_PASSWORD')
     rootProjectId = '_root'
 
-    buildProjec {//TODO - AK  Purposely missing a 't' because the below each closure does not find  resolve the correct delegate
+    //TODO - AK  Purposely missing a 't' because the below each closure does not find  resolve the correct delegate
+    //Setting the resolveStrategy to 1 inside the each closure fixes this
+    buildProjec {
         name = "Gradle"
         description = "Gradle open-source project"
+        configurationParameters = globalParams
         ['master', 'release', 'teamcity-spike'].each { String branch ->
             buildProject {
                 name = "$branch"
@@ -16,6 +35,26 @@ teamCity {
                 buildProject {
                     name = "Checkpoints"
                     description = "Configurations of the stages to getting a distribution that passes QA"
+                    buildType {
+                        name = "Stage 1 - Distribution"
+                        description = "Can be built as a production distribution"
+                    }
+                    buildType {
+                        name = "Stage 2 - Linux Basic Coverage"
+                        description = "Passes devBuild on linux"
+                    }
+                    buildType {
+                        name = "Stage 3 - Linux & Windows Basic Coverage & Basic Compatibility"
+                        description = "Passes devBuild on linux and windows and compatibility builds"
+                    }
+                    buildType {
+                        name = "Stage 4 - Full Coverage"
+                        description = "Passes devBuild on linux and windows with full test coverage"
+                    }
+                    buildType {
+                        name = "Stage 5 - Final"
+                        description = "Passes all QA stages"
+                    }
                 }
                 buildProject {
                     name = "Commit"

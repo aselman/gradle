@@ -14,25 +14,14 @@
  * limitations under the License.
  */
 
-package org.gradle.plugins.ci
+package org.gradle.plugins.ci.requests
 
-import groovy.transform.ToString
-import org.gradle.util.ConfigureUtil
 
-@ToString
-class BuildProject implements Parameterised, Identity {
-    List<BuildProject> subProjects = []
-    List<BuildType> buildTypes = []
+class CreateParameterRequest {
+    List<PropertyTuple> property = []
 
-    def buildProject(Closure closure) {
-        BuildProject buildProject = new BuildProject()
-        ConfigureUtil.configure(closure, buildProject)
-        this.subProjects << buildProject
-    }
-
-    def buildType(Closure closure) {
-        BuildType buildType = new BuildType()
-        ConfigureUtil.configure(closure, buildType)
-        this.buildTypes << buildType
+    static class PropertyTuple {
+        String name
+        String value
     }
 }
