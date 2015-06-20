@@ -61,7 +61,6 @@ class TeamCityApi {
             createBuildTypes(baseUrl, username, password, projectId, buildProject)
         }
 
-
         buildProject.subProjects.each { BuildProject subProject ->
             createProject(baseUrl, username, password, projectId, subProject)
         }
@@ -74,13 +73,18 @@ class TeamCityApi {
             createBuildTypeRequest.description = buildType.description
             createBuildTypeRequest.project = new ParentProject(id: projectId)
 
+            def settingTupples = buildType.settings.collect { Map map ->
+                new PropertyTuple(name: map.name, value: map.value)
+            }
+
+            createBuildTypeRequest.settings = new Settings(settingTupples)
+
             def client = restClient(baseUrl, username, password)
             ApiResponse resp = client.post(
                 contentType: APPLICATION_JSON,
                 path: "buildTypes",
                 headers: httpHeaders,
                 body: JsonOutput.toJson(createBuildTypeRequest))
-
         }
     }
 

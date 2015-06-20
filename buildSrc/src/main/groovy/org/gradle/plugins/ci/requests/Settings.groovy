@@ -17,5 +17,8 @@
 package org.gradle.plugins.ci.requests
 
 class Settings {
+    Settings(List<PropertyTuple> property) {
+        this.property = property
+    }
     List<PropertyTuple> property = []
 }
