@@ -19,8 +19,7 @@ package org.gradle.plugins.ci
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import groovyx.net.http.RESTClient
-import org.gradle.plugins.ci.requests.CreateParameterRequest
-import org.gradle.plugins.ci.requests.CreateProjectRequest
+import org.gradle.plugins.ci.requests.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -43,7 +42,7 @@ class TeamCityApi {
         CreateProjectRequest createProjectRequest = new CreateProjectRequest(
             name: buildProject.name,
             description: buildProject.description,
-            parentProject: new CreateProjectRequest.ParentProject(id: parentId),
+            parentProject: new ParentProject(id: parentId),
         )
         ApiResponse resp = client.post(
             contentType: APPLICATION_JSON,
@@ -58,8 +57,30 @@ class TeamCityApi {
             createConfigurationParameters(baseUrl, username, password, projectId, buildProject)
         }
 
+        if (buildProject.buildTypes) {
+            createBuildTypes(baseUrl, username, password, projectId, buildProject)
+        }
+
+
         buildProject.subProjects.each { BuildProject subProject ->
             createProject(baseUrl, username, password, projectId, subProject)
+        }
+    }
+
+    static createBuildTypes(String baseUrl, String username, String password, String projectId, BuildProject buildProject) {
+        buildProject.buildTypes.each { BuildType buildType ->
+            CreateBuildTypeRequest createBuildTypeRequest = new CreateBuildTypeRequest()
+            createBuildTypeRequest.name = buildType.name
+            createBuildTypeRequest.description = buildType.description
+            createBuildTypeRequest.project = new ParentProject(id: projectId)
+
+            def client = restClient(baseUrl, username, password)
+            ApiResponse resp = client.post(
+                contentType: APPLICATION_JSON,
+                path: "buildTypes",
+                headers: httpHeaders,
+                body: JsonOutput.toJson(createBuildTypeRequest))
+
         }
     }
 
@@ -86,7 +107,7 @@ class TeamCityApi {
         def client = restClient(baseUrl, username, password)
         CreateParameterRequest createParameterRequest = new CreateParameterRequest()
         createParameterRequest.property = buildProject.configurationParameters.collect { Map map ->
-            new CreateParameterRequest.PropertyTuple(name: map.name, value: map.value)
+            new PropertyTuple(name: map.name, value: map.value)
         }
 
         def json = JsonOutput.toJson(createParameterRequest)

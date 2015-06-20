@@ -16,7 +16,6 @@
 
 package org.gradle.plugins.ci.requests
 
-
-class CreateParameterRequest {
+class Settings {
     List<PropertyTuple> property = []
 }

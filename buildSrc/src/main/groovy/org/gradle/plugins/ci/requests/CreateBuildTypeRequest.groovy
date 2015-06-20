@@ -16,7 +16,9 @@
 
 package org.gradle.plugins.ci.requests
 
-
-class CreateParameterRequest {
-    List<PropertyTuple> property = []
+class CreateBuildTypeRequest {
+    String name
+    String description
+    Settings settings
+    ParentProject project
 }

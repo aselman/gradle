@@ -6,15 +6,34 @@ def globalParams = [
     ["name": "linux.java6.ibm.64bit", "value": "/opt/jdk/ibm-jdk-6"],
     ["name": "linux.java6.sun.64bit", "value": "/opt/jdk/sun-jdk-6"],
     ["name": "linux.java7.oracle.64bit", "value": "/opt/jdk/oracle-jdk-7"],
-    ["name" : "linux.java8.oracle.64bit","value": "/opt/jdk/oracle-jdk-8"],
-    ["name" : "linux.java9.oracle.64bit","value": "/opt/jdk/oracle-jdk-9"],
-    ["name" : "system.locks.readLock.linux1ExclusiveUse","value": ""],
-    ["name" : "teamcity.agent.filecache.publishing.disabled","value": "true"],
-    ["name" : "teamcity.agent.filecache.size.limit.bytes","value": "524288000"],
-    ["name" : "windows.java5.sun.32bit","value": "C:\\Program Files (x86)\\Java\\jdk1.5.0_22"],
-    ["name" : "windows.java6.sun.64bit","value": "C:\\program files\\java\\jdk1.6.0_35"],
-    ["name" : "windows.java7.oracle.64bit","value": "C:\\Program Files\\Java\\jdk1.7.0_25"],
-    ["name" : "windows.java8.oracle.64bit","value": "C:\\Program Files\\Java\\jdk1.8"]
+    ["name": "linux.java8.oracle.64bit", "value": "/opt/jdk/oracle-jdk-8"],
+    ["name": "linux.java9.oracle.64bit", "value": "/opt/jdk/oracle-jdk-9"],
+    ["name": "system.locks.readLock.linux1ExclusiveUse", "value": ""],
+    ["name": "teamcity.agent.filecache.publishing.disabled", "value": "true"],
+    ["name": "teamcity.agent.filecache.size.limit.bytes", "value": "524288000"],
+    ["name": "windows.java5.sun.32bit", "value": "C:\\Program Files (x86)\\Java\\jdk1.5.0_22"],
+    ["name": "windows.java6.sun.64bit", "value": "C:\\program files\\java\\jdk1.6.0_35"],
+    ["name": "windows.java7.oracle.64bit", "value": "C:\\Program Files\\Java\\jdk1.7.0_25"],
+    ["name": "windows.java8.oracle.64bit", "value": "C:\\Program Files\\Java\\jdk1.8"]
+]
+
+def buildTypeSettings = [
+    ["name": "allowExternalStatus", "value": "false"],
+    ["name": "artifactRules", "value": "build/build-receipt.properties"],
+    ["name" : "buildNumberCounter","value": "1047"],
+    ["name" : "buildNumberPattern","value": "%build.counter%"],
+    ["name": "checkoutDirectory"], //why no val
+    [ "name" : "checkoutMode","value": "ON_AGENT"],
+    ["name" : "cleanBuild","value": "false"],
+    ["name" : "enableHangingBuildsDetection","value": "true"],
+    ["name" : "executionTimeoutMin","value": "0"],
+    ["name" : "maximumNumberOfBuilds","value": "0"],
+    ["name" : "shouldFailBuildIfTestsFailed","value": "true"],
+    ["name" : "shouldFailBuildOnAnyErrorMessage","value": "false"],
+    ["name" : "shouldFailBuildOnBadExitCode","value": "true"],
+    ["name" : "shouldFailBuildOnOOMEOrCrash","value": "true"],
+    ["name" : "showDependenciesChanges","value": "false"],
+    ["name" : "vcsLabelingBranchFilter","value": "+:<default>"]
 ]
 teamCity {
     baseUrl = 'http://localhost:8111'
@@ -38,22 +57,27 @@ teamCity {
                     buildType {
                         name = "Stage 1 - Distribution"
                         description = "Can be built as a production distribution"
+                        settings = buildTypeSettings
                     }
                     buildType {
                         name = "Stage 2 - Linux Basic Coverage"
                         description = "Passes devBuild on linux"
+                        settings = buildTypeSettings
                     }
                     buildType {
                         name = "Stage 3 - Linux & Windows Basic Coverage & Basic Compatibility"
                         description = "Passes devBuild on linux and windows and compatibility builds"
+                        settings = buildTypeSettings
                     }
                     buildType {
                         name = "Stage 4 - Full Coverage"
                         description = "Passes devBuild on linux and windows with full test coverage"
+                        settings = buildTypeSettings
                     }
                     buildType {
                         name = "Stage 5 - Final"
                         description = "Passes all QA stages"
+                        settings = buildTypeSettings
                     }
                 }
                 buildProject {

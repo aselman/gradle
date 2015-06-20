@@ -16,5 +16,6 @@
 
 package org.gradle.plugins.ci
 
-class BuildType implements Identity{
+class BuildType implements Identity {
+    List<Map<String, String>> settings
 }

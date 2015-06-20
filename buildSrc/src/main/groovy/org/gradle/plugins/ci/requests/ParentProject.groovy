@@ -16,7 +16,6 @@
 
 package org.gradle.plugins.ci.requests
 
-
-class CreateParameterRequest {
-    List<PropertyTuple> property = []
+class ParentProject {
+    String id
 }

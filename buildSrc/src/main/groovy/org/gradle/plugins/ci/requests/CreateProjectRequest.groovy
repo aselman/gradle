@@ -21,7 +21,4 @@ class CreateProjectRequest {
     String description
     String id
     ParentProject parentProject
-    static class ParentProject {
-        String id
-    }
 }
