@@ -17,5 +17,5 @@
 package org.gradle.plugins.ci
 
 trait Parameterised {
-    List<Map<String, String>> configurationParameters
+    List<Map<String, String>> parameters
 }

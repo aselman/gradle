@@ -16,15 +16,6 @@
 
 package org.gradle.plugins.ci
 
-import org.gradle.util.ConfigureUtil
-
-class BuildType implements Identity {
-    List<Map<String, String>> settings
-    List<BuildStep> buildSteps = []
-
-    def buildStep(Closure closure) {
-        BuildStep buildStep = new BuildStep()
-        ConfigureUtil.configure(closure, buildStep)
-        this.buildSteps << buildStep
-    }
+class BuildStep implements Identity, Parameterised {
+    String type
 }

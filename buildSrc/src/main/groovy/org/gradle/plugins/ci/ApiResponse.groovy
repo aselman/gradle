@@ -16,6 +16,8 @@
 
 package org.gradle.plugins.ci
 
+import groovy.json.JsonSlurper
+
 class ApiResponse {
     String body
     int status
@@ -27,5 +29,9 @@ class ApiResponse {
             "body='" + body + '\'' +
             ", status=" + status +
             '}';
+    }
+
+    def slurp() {
+        new JsonSlurper().parseText(body)
     }
 }

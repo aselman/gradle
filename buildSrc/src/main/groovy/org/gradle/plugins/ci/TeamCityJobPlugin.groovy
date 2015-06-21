@@ -24,6 +24,7 @@ class TeamCityJobPlugin implements Plugin<Project> {
     void apply(Project project) {
         project.extensions.create("teamCity", TeamCityExtension)
         project.task('syncTeamCityConfig', type: TeamCitySyncTask)
+        project.task('exportTeamCityConfig', type: TeamCityExport)
 
         project.task('printTeamCityConfig') << {
             TeamCityExtension teamCityExtension = project.extensions.teamCity

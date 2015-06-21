@@ -20,83 +20,842 @@ def globalParams = [
 def buildTypeSettings = [
     ["name": "allowExternalStatus", "value": "false"],
     ["name": "artifactRules", "value": "build/build-receipt.properties"],
-    ["name" : "buildNumberCounter","value": "1047"],
-    ["name" : "buildNumberPattern","value": "%build.counter%"],
+    ["name": "buildNumberCounter", "value": "1047"],
+    ["name": "buildNumberPattern", "value": "%build.counter%"],
     ["name": "checkoutDirectory"], //why no val
-    [ "name" : "checkoutMode","value": "ON_AGENT"],
-    ["name" : "cleanBuild","value": "false"],
-    ["name" : "enableHangingBuildsDetection","value": "true"],
-    ["name" : "executionTimeoutMin","value": "0"],
-    ["name" : "maximumNumberOfBuilds","value": "0"],
-    ["name" : "shouldFailBuildIfTestsFailed","value": "true"],
-    ["name" : "shouldFailBuildOnAnyErrorMessage","value": "false"],
-    ["name" : "shouldFailBuildOnBadExitCode","value": "true"],
-    ["name" : "shouldFailBuildOnOOMEOrCrash","value": "true"],
-    ["name" : "showDependenciesChanges","value": "false"],
-    ["name" : "vcsLabelingBranchFilter","value": "+:<default>"]
+    ["name": "checkoutMode", "value": "ON_AGENT"],
+    ["name": "cleanBuild", "value": "false"],
+    ["name": "enableHangingBuildsDetection", "value": "true"],
+    ["name": "executionTimeoutMin", "value": "0"],
+    ["name": "maximumNumberOfBuilds", "value": "0"],
+    ["name": "shouldFailBuildIfTestsFailed", "value": "true"],
+    ["name": "shouldFailBuildOnAnyErrorMessage", "value": "false"],
+    ["name": "shouldFailBuildOnBadExitCode", "value": "true"],
+    ["name": "shouldFailBuildOnOOMEOrCrash", "value": "true"],
+    ["name": "showDependenciesChanges", "value": "false"],
+    ["name": "vcsLabelingBranchFilter", "value": "+:<default>"]
 ]
 teamCity {
     baseUrl = 'http://localhost:8111'
-    username = System.getenv('TC_USERNAME')
-    password = System.getenv('TC_PASSWORD')
+//    username = System.getenv('TC_USERNAME')
+    username = 'admin'
+//    password = System.getenv('TC_PASSWORD')
+    password = 'password'
     rootProjectId = '_root'
 
-    //TODO - AK  Purposely missing a 't' because the below each closure does not find  resolve the correct delegate
-    //Setting the resolveStrategy to 1 inside the each closure fixes this
+
     buildProjec {
         name = "Gradle"
-        description = "Gradle open-source project"
-        configurationParameters = globalParams
-        ['master', 'release', 'teamcity-spike'].each { String branch ->
+        description = "Gradle Open-Source Project"
+
+        buildProject {
+            name = "Master"
+            description = "Master configurations"
+
             buildProject {
-                name = "$branch"
-                description = "$branch configurations"
-                buildProject {
-                    name = "Checkpoints"
-                    description = "Configurations of the stages to getting a distribution that passes QA"
-                    buildType {
-                        name = "Stage 1 - Distribution"
-                        description = "Can be built as a production distribution"
-                        settings = buildTypeSettings
+                name = "Checkpoints"
+                description = "Configurations of the stages to getting a distribution that passes QA"
+
+
+                buildType {
+                    name = "Stage 1 - Distribution"
+                    description = "Can be built as a production distribution"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'teamcity.step.mode', "value": """default"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """createBuildReceipt"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
                     }
-                    buildType {
-                        name = "Stage 2 - Linux Basic Coverage"
-                        description = "Passes devBuild on linux"
-                        settings = buildTypeSettings
+
+                }
+
+                buildType {
+                    name = "Stage 2 - Linux Basic Coverage"
+                    description = "Passes devBuild on linux"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """createBuildReceipt"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
                     }
-                    buildType {
-                        name = "Stage 3 - Linux & Windows Basic Coverage & Basic Compatibility"
-                        description = "Passes devBuild on linux and windows and compatibility builds"
-                        settings = buildTypeSettings
+
+                }
+
+                buildType {
+                    name = "Stage 3 - Linux & Windows Basic Coverage & Basic Compatibility"
+                    description = "Passes devBuild on linux and windows and compatibility builds"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """createBuildReceipt"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
                     }
-                    buildType {
-                        name = "Stage 4 - Full Coverage"
-                        description = "Passes devBuild on linux and windows with full test coverage"
-                        settings = buildTypeSettings
+
+                }
+
+                buildType {
+                    name = "Stage 4 - Full Coverage"
+                    description = "Passes devBuild on linux and windows with full test coverage"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """createBuildReceipt"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
                     }
-                    buildType {
-                        name = "Stage 5 - Final"
-                        description = "Passes all QA stages"
-                        settings = buildTypeSettings
+
+                }
+
+                buildType {
+                    name = "Stage 5 - Final"
+                    description = "Passes all QA stages"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """createBuildReceipt"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
                     }
+
                 }
-                buildProject {
-                    name = "Commit"
-                    description = "Configurations for daily development"
-                }
-                buildProject {
-                    name = "Compatibility"
-                    description = "runs compatibility checks to ensure gradle is working with other systems"
-                }
-                buildProject {
-                    name = "Coverage"
-                    description = "Configurations that provide full test coverage on various platforms"
-                }
-                buildProject {
-                    name = "Performance"
-                    description = "Configurations that execute performance tests (to be run exclusively on a given machine)"
-                }
+
             }
+
+            buildProject {
+                name = "Commit"
+                description = "Configurations for daily development"
+
+
+                buildType {
+                    name = "Build Distributions"
+                    description = "Creation and verification of the distribution and documentation"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'teamcity.step.mode', "value": """default"""], ["name": 'ui.gradleRunner.additional.gradle.cmd.params', "value": """-PmaxParallelForks=%maxParallelForks% -Dbuild.number=%build.number%"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """clean packageBuild"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+                buildType {
+                    name = "Linux - Java 1.7"
+                    description = "Fast verification on Linux through in-process tests"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'ui.gradleRunner.additional.gradle.cmd.params', "value": """-PmaxParallelForks=%maxParallelForks% -s --continue"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """clean quickTest"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+                buildType {
+                    name = "Sanity Check"
+                    description = "Static code analysis, checkstyle, release notes verification, etc."
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'teamcity.step.mode', "value": """default"""], ["name": 'ui.gradleRunner.additional.gradle.cmd.params', "value": """--continue -s"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """clean sanityCheck"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+                buildType {
+                    name = "Windows - Java 1.6"
+                    description = "Fast verification on Windows through forked tests"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'ui.gradleRunner.additional.gradle.cmd.params', "value": """-PmaxParallelForks=%maxParallelForks% -s --continue"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """clean quickTest"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+            }
+
+            buildProject {
+                name = "Compatibility"
+                description = "runs compatibility checks to ensure gradle is working with other systems"
+
+
+            }
+
+            buildProject {
+                name = "Coverage"
+                description = "Configurations that provide full test coverage on various platforms"
+
+
+                buildType {
+                    name = "Linux - Java 1.6"
+                    description = "null"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'ui.gradleRunner.additional.gradle.cmd.params', "value": """-s --continue -PmaxParallelForks=%maxParallelForks%"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """clean platformTest"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+                buildType {
+                    name = "Linux - Java 1.6 - Cross-version tests"
+                    description = "null"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'teamcity.step.mode', "value": """default"""], ["name": 'ui.gradleRunner.additional.gradle.cmd.params', "value": """-s -PmaxParallelForks=%maxParallelForks% --continue"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """clean crossVersionTest"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+                buildType {
+                    name = "Linux - Java 1.6 - Daemon integration tests"
+                    description = "null"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'ui.gradleRunner.additional.gradle.cmd.params', "value": """-s --continue -PmaxParallelForks=%maxParallelForks%"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """clean daemonTest"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+                buildType {
+                    name = "Linux - Java 1.6 - Parallel integration tests"
+                    description = "null"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'ui.gradleRunner.additional.gradle.cmd.params', "value": """-s --continue -PmaxParallelForks=%maxParallelForks%"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """clean parallelTest"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+                buildType {
+                    name = "Linux - Java 1.6/IBM"
+                    description = "null"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'ui.gradleRunner.additional.gradle.cmd.params', "value": """-s --continue -PmaxParallelForks=%maxParallelForks%"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """clean platformTest"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+                buildType {
+                    name = "Linux - Java 1.8 - Quick test"
+                    description = "null"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'teamcity.step.mode', "value": """default"""], ["name": 'ui.gradleRunner.additional.gradle.cmd.params', "value": """-s --continue -PmaxParallelForks=%maxParallelForks%"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """clean quickTest"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+                buildType {
+                    name = "Linux - Java 1.9"
+                    description = "null"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'teamcity.step.mode', "value": """default"""], ["name": 'ui.gradleRunner.additional.gradle.cmd.params', "value": """-s --continue -PmaxParallelForks=%maxParallelForks%"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """clean java9Build"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+                buildType {
+                    name = "Unknown OS - Java 1.6"
+                    description = "null"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'teamcity.step.mode', "value": """default"""], ["name": 'ui.gradleRunner.additional.gradle.cmd.params', "value": """-PtestWithUnknownOS=true -s -PmaxParallelForks=%maxParallelForks% --continue"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """clean fullTest"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+                buildType {
+                    name = "Windows - Java 1.7 - Cross-version tests"
+                    description = "null"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'teamcity.step.mode', "value": """default"""], ["name": 'ui.gradleRunner.additional.gradle.cmd.params', "value": """-PmaxParallelForks=%maxParallelForks% --continue"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """clean crossVersionTest"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+                buildType {
+                    name = "Windows - Java 1.7 - Daemon integration tests"
+                    description = "null"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'ui.gradleRunner.additional.gradle.cmd.params', "value": """-s --continue -PmaxParallelForks=%maxParallelForks%"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """clean daemonTest"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+                buildType {
+                    name = "Windows - Java 1.8"
+                    description = "null"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'teamcity.step.mode', "value": """default"""], ["name": 'ui.gradleRunner.additional.gradle.cmd.params', "value": """-PmaxParallelForks=%maxParallelForks% --continue"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """clean platformTest -s --continue --profile"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+            }
+
+            buildProject {
+                name = "Performance"
+                description = "Configurations that execute performance tests (to be run exclusively on a given machine)"
+
+
+                buildType {
+                    name = "Performance experiments - Linux"
+                    description = "null"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'teamcity.step.mode', "value": """default"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """clean performanceExperiments -i"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+                buildType {
+                    name = "Performance tests - Linux"
+                    description = "null"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """clean performanceTest -i"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+                buildType {
+                    name = "Performance tests - Windows"
+                    description = "null"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'teamcity.step.mode', "value": """default"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """clean performanceTest -s"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+            }
+
+
         }
+
+        buildProject {
+            name = "Promotion"
+            description = "Promotion configurations"
+
+
+            buildType {
+                name = "Final Release"
+                description = "Promotes the latest successful change on 'release' as a new release"
+
+                buildStep {
+                    type = "gradle-runner"
+                    name = "Promote"
+                    description = "null"
+                    parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'teamcity.step.mode', "value": """default"""], ["name": 'ui.gradleRunner.additional.gradle.cmd.params', "value": """-PuseBuildReceipt -PconfirmationCode=%confirmationCode%"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """promoteFinalRelease"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                }
+
+            }
+
+            buildType {
+                name = "Nightly Master Snapshot"
+                description = "Promotes the latest successful change on 'master' as the new nightly"
+
+                buildStep {
+                    type = "gradle-runner"
+                    name = "Promote"
+                    description = "null"
+                    parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'teamcity.step.mode', "value": """default"""], ["name": 'ui.gradleRunner.additional.gradle.cmd.params', "value": """-PuseBuildReceipt"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """promoteNightly"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                }
+
+            }
+
+            buildType {
+                name = "Release Branch Snapshot"
+                description = "Deploys the latest successful change on 'release' as a new snapshot"
+
+                buildStep {
+                    type = "gradle-runner"
+                    name = ""
+                    description = "null"
+                    parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'ui.gradleRunner.additional.gradle.cmd.params', "value": """-PuseBuildReceipt"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """promoteSnapshot"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                }
+
+            }
+
+            buildType {
+                name = "Release Candidate"
+                description = "Promotes the latest successful change on 'release' as a new release candidate"
+
+                buildStep {
+                    type = "gradle-runner"
+                    name = "Promote"
+                    description = "null"
+                    parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'teamcity.step.mode', "value": """default"""], ["name": 'ui.gradleRunner.additional.gradle.cmd.params', "value": """-PuseBuildReceipt -PconfirmationCode=%confirmationCode%"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """promoteRc"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                }
+
+            }
+
+        }
+
+        buildProject {
+            name = "Pull Requests"
+            description = "Test builds for pull requests"
+
+
+            buildType {
+                name = "Linux - Java 1.7 - with sanity check"
+                description = "Static code analysis, checkstyle, release notes verification, etc."
+
+                buildStep {
+                    type = "gradle-runner"
+                    name = ""
+                    description = "null"
+                    parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'teamcity.step.mode', "value": """default"""], ["name": 'ui.gradleRunner.additional.gradle.cmd.params', "value": """-s --continue"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """sanityCheck quickTest"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                }
+
+            }
+
+        }
+
+        buildProject {
+            name = "Release"
+            description = "Release configurations"
+
+            buildProject {
+                name = "Checkpoints"
+                description = "Configurations of the stages to getting a distribution that passes QA"
+
+
+                buildType {
+                    name = "Stage 1 - Distribution"
+                    description = "Can be built as a production distribution"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """createBuildReceipt"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+                buildType {
+                    name = "Stage 2 - Linux Basic Coverage"
+                    description = "Passes devBuild on linux"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """createBuildReceipt"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+                buildType {
+                    name = "Stage 3 - Linux & Windows Basic Coverage & Basic Compatibility"
+                    description = "Passes devBuild on linux and windows Passes devBuild on linux and windows and compatibility builds"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """createBuildReceipt"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+                buildType {
+                    name = "Stage 4 - Full Coverage"
+                    description = "Passes devBuild on linux and windows with full test coverage"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """createBuildReceipt"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+                buildType {
+                    name = "Stage 5 - Final"
+                    description = "Passes all QA stages"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """createBuildReceipt"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+            }
+
+            buildProject {
+                name = "Commit"
+                description = "Configurations for daily development"
+
+
+                buildType {
+                    name = "Build Distributions"
+                    description = "null"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'teamcity.step.mode', "value": """default"""], ["name": 'ui.gradleRunner.additional.gradle.cmd.params', "value": """-PmaxParallelForks=%maxParallelForks% -Dbuild.number=%build.number%"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """packageBuild"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+                buildType {
+                    name = "Linux - Java 1.7"
+                    description = "null"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'teamcity.step.mode', "value": """default"""], ["name": 'ui.gradleRunner.additional.gradle.cmd.params', "value": """-s -PmaxParallelForks=%maxParallelForks% --continue"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """clean quickTest"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+                buildType {
+                    name = "Sanity Check"
+                    description = "Compilation, static analysis and doc tests."
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'teamcity.step.mode', "value": """default"""], ["name": 'ui.gradleRunner.additional.gradle.cmd.params', "value": """--continue"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """clean sanityCheck"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+                buildType {
+                    name = "Windows - Java 1.6"
+                    description = "null"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'teamcity.step.mode', "value": """default"""], ["name": 'ui.gradleRunner.additional.gradle.cmd.params', "value": """-PmaxParallelForks=%maxParallelForks% -s --continue"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """clean quickTest"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+            }
+
+            buildProject {
+                name = "Compatibility"
+                description = "runs compatibility checks to ensure gradle is working with other systems"
+
+
+                buildType {
+                    name = "Colony_Compatibility"
+                    description = "Check Gradle against latest development version of Colony"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = "Gradle Tests"
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'teamcity.coverage.jacoco.patterns', "value": """+:*"""], ["name": 'teamcity.step.mode', "value": """default"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """clean :gradle-test:test"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+            }
+
+            buildProject {
+                name = "Coverage"
+                description = "Configurations that provide full test coverage on various platforms"
+
+
+                buildType {
+                    name = "Linux - Java 1.6"
+                    description = "null"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'teamcity.step.mode', "value": """default"""], ["name": 'ui.gradleRunner.additional.gradle.cmd.params', "value": """-s --continue -PmaxParallelForks=%maxParallelForks%"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """clean platformTest"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+                buildType {
+                    name = "Linux - Java 1.6 - Cross-version tests"
+                    description = "null"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'teamcity.step.mode', "value": """default"""], ["name": 'ui.gradleRunner.additional.gradle.cmd.params', "value": """-s --continue -PmaxParallelForks=%maxParallelForks%"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """clean crossVersionTest"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+                buildType {
+                    name = "Linux - Java 1.6 - Daemon integration tests"
+                    description = "null"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'teamcity.step.mode', "value": """default"""], ["name": 'ui.gradleRunner.additional.gradle.cmd.params', "value": """-s --continue -PmaxParallelForks=%maxParallelForks%"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """clean daemonTest"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+                buildType {
+                    name = "Linux - Java 1.6 - Parallel integration tests"
+                    description = "null"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'ui.gradleRunner.additional.gradle.cmd.params', "value": """-s --continue -PmaxParallelForks=%maxParallelForks%"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """clean parallelTest"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+                buildType {
+                    name = "Linux - Java 1.6/IBM"
+                    description = "null"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'teamcity.step.mode', "value": """default"""], ["name": 'ui.gradleRunner.additional.gradle.cmd.params', "value": """-s --continue -PmaxParallelForks=%maxParallelForks%"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """clean platformTest"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+                buildType {
+                    name = "Linux - Java 1.8 - quickTest"
+                    description = "null"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'teamcity.step.mode', "value": """default"""], ["name": 'ui.gradleRunner.additional.gradle.cmd.params', "value": """-s --continue -PmaxParallelForks=%maxParallelForks%"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """clean quickTest"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+                buildType {
+                    name = "Linux - Java 1.9"
+                    description = "null"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'teamcity.step.mode', "value": """default"""], ["name": 'ui.gradleRunner.additional.gradle.cmd.params', "value": """-s --continue -PmaxParallelForks=%maxParallelForks%"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """clean java9Build"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+                buildType {
+                    name = "Unknown OS - Java 1.6"
+                    description = "null"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'teamcity.step.mode', "value": """default"""], ["name": 'ui.gradleRunner.additional.gradle.cmd.params', "value": """-PtestWithUnknownOS=true -s -PmaxParallelForks=%maxParallelForks% --continue"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """clean fullTest"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+                buildType {
+                    name = "Windows - Java 1.7 - Cross-version tests"
+                    description = "null"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'teamcity.step.mode', "value": """default"""], ["name": 'ui.gradleRunner.additional.gradle.cmd.params', "value": """-PmaxParallelForks=%maxParallelForks% --continue"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """clean crossVersionTest"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+                buildType {
+                    name = "Windows - Java 1.7 - Daemon integration tests"
+                    description = "null"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'teamcity.step.mode', "value": """default"""], ["name": 'ui.gradleRunner.additional.gradle.cmd.params', "value": """-s --continue -PmaxParallelForks=%maxParallelForks%"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """clean daemonTest"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+                buildType {
+                    name = "Windows - Java 1.8"
+                    description = "null"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'teamcity.step.mode', "value": """default"""], ["name": 'ui.gradleRunner.additional.gradle.cmd.params', "value": """-s -PmaxParallelForks=%maxParallelForks% --continue"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """clean platformTest"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+            }
+
+            buildProject {
+                name = "Performance"
+                description = "Configurations that execute performance tests (to be run exclusively on a given machine)"
+
+
+                buildType {
+                    name = "Linux"
+                    description = "null"
+
+                    buildStep {
+                        type = "gradle-runner"
+                        name = ""
+                        description = "null"
+                        parameters = [["name": 'teamcity.coverage.emma.include.source', "value": """true"""], ["name": 'teamcity.coverage.emma.instr.parameters', "value": """-ix -*Test*"""], ["name": 'teamcity.coverage.idea.includePatterns', "value": """*"""], ["name": 'ui.gradleRunner.gradle.tasks.names', "value": """clean performanceTest -i"""], ["name": 'ui.gradleRunner.gradle.wrapper.useWrapper', "value": """true"""]]
+                    }
+
+                }
+
+            }
+
+
+        }
+
+
     }
+
 }
+//TODO - AK  Purposely missing a 't' because the below each closure does not find  resolve the correct delegate
+//Setting the resolveStrategy to 1 inside the each closure fixes this
+//    buildProjec {
+//        name = "Gradle"
+//        description = "Gradle open-source project"
+//        parameters = globalParams
+//        ['master', 'release', 'teamcity-spike'].each { String branch ->
+//            buildProject {
+//                name = "$branch"
+//                description = "$branch configurations"
+//                buildProject {
+//                    name = "Checkpoints"
+//                    description = "Configurations of the stages to getting a distribution that passes QA"
+//                    buildType {
+//                        name = "Stage 1 - Distribution"
+//                        description = "Can be built as a production distribution"
+//                        settings = buildTypeSettings
+//                    }
+//                    buildType {
+//                        name = "Stage 2 - Linux Basic Coverage"
+//                        description = "Passes devBuild on linux"
+//                        settings = buildTypeSettings
+//                    }
+//                    buildType {
+//                        name = "Stage 3 - Linux & Windows Basic Coverage & Basic Compatibility"
+//                        description = "Passes devBuild on linux and windows and compatibility builds"
+//                        settings = buildTypeSettings
+//                    }
+//                    buildType {
+//                        name = "Stage 4 - Full Coverage"
+//                        description = "Passes devBuild on linux and windows with full test coverage"
+//                        settings = buildTypeSettings
+//                    }
+//                    buildType {
+//                        name = "Stage 5 - Final"
+//                        description = "Passes all QA stages"
+//                        settings = buildTypeSettings
+//                    }
+//                }
+//                buildProject {
+//                    name = "Commit"
+//                    description = "Configurations for daily development"
+//                }
+//                buildProject {
+//                    name = "Compatibility"
+//                    description = "runs compatibility checks to ensure gradle is working with other systems"
+//                }
+//                buildProject {
+//                    name = "Coverage"
+//                    description = "Configurations that provide full test coverage on various platforms"
+//                }
+//                buildProject {
+//                    name = "Performance"
+//                    description = "Configurations that execute performance tests (to be run exclusively on a given machine)"
+//                }
+//            }
+//        }
+//    }
+

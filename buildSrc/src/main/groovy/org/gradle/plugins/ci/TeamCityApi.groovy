@@ -24,8 +24,8 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 class TeamCityApi {
-    static final String APPLICATION_JSON = 'application/json'
-    static Map httpHeaders = ["Accept": APPLICATION_JSON]
+    public static final String APPLICATION_JSON = 'application/json'
+    public static Map httpHeaders = ["Accept": APPLICATION_JSON]
     private static final Logger LOGGER = LoggerFactory.getLogger(TeamCityApi.class);
 
     static applyFromTemplate(TeamCityExtension teamCityExtension) {
@@ -53,7 +53,7 @@ class TeamCityApi {
         def json = new JsonSlurper().parseText(resp.body)
         String projectId = json.id
 
-        if (buildProject.configurationParameters) {
+        if (buildProject.parameters) {
             createConfigurationParameters(baseUrl, username, password, projectId, buildProject)
         }
 
@@ -110,7 +110,7 @@ class TeamCityApi {
         LOGGER.info("Creating configuration parameters for project: $buildProject.name")
         def client = restClient(baseUrl, username, password)
         CreateParameterRequest createParameterRequest = new CreateParameterRequest()
-        createParameterRequest.property = buildProject.configurationParameters.collect { Map map ->
+        createParameterRequest.property = buildProject.parameters.collect { Map map ->
             new PropertyTuple(name: map.name, value: map.value)
         }
 
