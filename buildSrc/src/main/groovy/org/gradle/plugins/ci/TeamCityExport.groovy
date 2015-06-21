@@ -36,7 +36,39 @@ class TeamCityExport extends DefaultTask {
             headers: TeamCityApi.httpHeaders,
         )
         File file = new File(exportDir, "Export.groovy")
+        dumpVcsRoots('_root', client, file)
         dumpProjects(projectsResp, client, file)
+    }
+
+    def dumpVcsRoots(String projectId, RESTClient client, File file) {
+        ApiResponse allVcsRootsResp = client.get(
+            contentType: TeamCityApi.APPLICATION_JSON,
+            path: "vcs-roots",
+            headers: TeamCityApi.httpHeaders,
+        )
+
+        def vcsJson = allVcsRootsResp.slurp()
+        vcsJson."vcs-root"?.each { root ->
+            ApiResponse vcsRootResp = client.get(
+                contentType: TeamCityApi.APPLICATION_JSON,
+                path: "vcs-roots/$root.id",
+                headers: TeamCityApi.httpHeaders,
+            )
+
+            def vcsRoot = vcsRootResp.slurp()
+            List<String> params = vcsRoot['properties']?.property?.collect { prop ->
+                """["name" :'${prop.name}', "value":${propertyValue(prop.value)}]"""
+            }
+
+            file << """
+        vcsRoot {
+            name = "${vcsRoot.name}"
+            id = "${vcsRoot.id}"
+            ${params ? "parameters = [${params.join(',\n')}]" : ''}
+        }
+"""
+        }
+
     }
 
     def dumpProjects(ApiResponse apiResponse, RESTClient client, File file) {

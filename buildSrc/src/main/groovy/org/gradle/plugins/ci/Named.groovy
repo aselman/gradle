@@ -14,17 +14,9 @@
  * limitations under the License.
  */
 
-package org.gradle.plugins.ci
+package org.gradle.plugins.ci;
 
-import org.gradle.util.ConfigureUtil
-
-class BuildType implements Named {
-    List<Map<String, String>> settings
-    List<BuildStep> buildSteps = []
-
-    def buildStep(Closure closure) {
-        BuildStep buildStep = new BuildStep()
-        ConfigureUtil.configure(closure, buildStep)
-        this.buildSteps << buildStep
-    }
+trait Named {
+    String name
+    String description
 }

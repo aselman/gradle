@@ -24,11 +24,18 @@ class TeamCityExtension {
     String password
     String rootProjectId
     List<BuildProject> buildProjects = []
+    List<GitVcsRoot> vcsRoots = []
 
     def buildProjec(Closure closure) {
-        closure.resolveStrategy = 1
         BuildProject buildProject = new BuildProject()
         ConfigureUtil.configure(closure, buildProject)
         buildProjects << buildProject
+    }
+
+    def vcsRoot(Closure closure) {
+        closure.resolveStrategy = 1
+        GitVcsRoot gitVcsRoot = new GitVcsRoot()
+        ConfigureUtil.configure(closure, gitVcsRoot)
+        vcsRoots << gitVcsRoot
     }
 }

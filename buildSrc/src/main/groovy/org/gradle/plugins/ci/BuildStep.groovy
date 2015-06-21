@@ -16,6 +16,6 @@
 
 package org.gradle.plugins.ci
 
-class BuildStep implements Identity, Parameterised {
+class BuildStep implements Named, Parameterised {
     String type
 }

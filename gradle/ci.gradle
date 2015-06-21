@@ -44,6 +44,284 @@ teamCity {
     rootProjectId = '_root'
 
 
+    vcsRoot {
+        name = "Colony Master"
+        id = "Colony_ColonyMaster"
+        parameters = [["name": 'agentCleanFilesPolicy', "value": """ALL_UNTRACKED"""],
+                      ["name": 'agentCleanPolicy', "value": """ON_BRANCH_CHANGE"""],
+                      ["name": 'authMethod', "value": """PASSWORD"""],
+                      ["name": 'branch', "value": """refs/heads/master"""],
+                      ["name": 'ignoreKnownHosts', "value": """true"""],
+                      ["name": 'secure:password', "value": """null"""],
+                      ["name": 'submoduleCheckout', "value": """CHECKOUT"""],
+                      ["name": 'url', "value": """https://gradlewaregitbot@github.com/gradle/colony.git"""],
+                      ["name": 'username', "value": """gradlewaregitbot"""],
+                      ["name": 'usernameStyle', "value": """USERID"""]]
+    }
+
+    vcsRoot {
+        name = "Colony Release"
+        id = "Colony_ColonyRelease"
+        parameters = [["name": 'agentCleanFilesPolicy', "value": """ALL_UNTRACKED"""],
+                      ["name": 'agentCleanPolicy', "value": """ON_BRANCH_CHANGE"""],
+                      ["name": 'authMethod', "value": """PASSWORD"""],
+                      ["name": 'branch', "value": """refs/heads/release"""],
+                      ["name": 'ignoreKnownHosts', "value": """true"""],
+                      ["name": 'secure:password', "value": """null"""],
+                      ["name": 'submoduleCheckout', "value": """CHECKOUT"""],
+                      ["name": 'url', "value": """https://gradlewaregitbot@github.com/gradle/colony.git"""],
+                      ["name": 'username', "value": """gradlewaregitbot"""],
+                      ["name": 'usernameStyle', "value": """USERID"""]]
+    }
+
+    vcsRoot {
+        name = "Continuous Delivery Jump Start"
+        id = "GradlewareTrainingMaterial_ContinuousDeliveryJumpStart_ContinuousDeliveryJumpSta"
+        parameters = [["name": 'agentCleanFilesPolicy', "value": """ALL_UNTRACKED"""],
+                      ["name": 'agentCleanPolicy', "value": """ON_BRANCH_CHANGE"""],
+                      ["name": 'authMethod', "value": """ANONYMOUS"""],
+                      ["name": 'branch', "value": """refs/heads/master"""],
+                      ["name": 'ignoreKnownHosts', "value": """true"""],
+                      ["name": 'submoduleCheckout', "value": """CHECKOUT"""],
+                      ["name": 'url', "value": """https://gradlewaregitbot@github.com/gradleware/continuous-delivery-jump-start.git"""],
+                      ["name": 'useAlternates', "value": """true"""],
+                      ["name": 'usernameStyle', "value": """USERID"""]]
+    }
+
+    vcsRoot {
+        name = "Gradle Master Branch"
+        id = "Gradle_Master"
+        parameters = [["name": 'agentCleanFilesPolicy', "value": """ALL_UNTRACKED"""],
+                      ["name": 'agentCleanPolicy', "value": """ON_BRANCH_CHANGE"""],
+                      ["name": 'authMethod', "value": """ANONYMOUS"""],
+                      ["name": 'branch', "value": """master"""],
+                      ["name": 'ignoreKnownHosts', "value": """true"""],
+                      ["name": 'submoduleCheckout', "value": """CHECKOUT"""],
+                      ["name": 'url', "value": """git://github.com/gradle/gradle.git"""],
+                      ["name": 'usernameStyle', "value": """USERID"""]]
+    }
+
+    vcsRoot {
+        name = "Gradle Mirror Master"
+        id = "Gradle_Mirror_Master"
+        parameters = [["name": 'agentCleanFilesPolicy', "value": """ALL_UNTRACKED"""],
+                      ["name": 'agentCleanPolicy', "value": """ON_BRANCH_CHANGE"""],
+                      ["name": 'authMethod', "value": """PRIVATE_KEY_DEFAULT"""],
+                      ["name": 'branch', "value": """refs/heads/master"""],
+                      ["name": 'ignoreKnownHosts', "value": """true"""],
+                      ["name": 'submoduleCheckout', "value": """CHECKOUT"""],
+                      ["name": 'url', "value": """git@github.com:gradleware/gradle-mirror.git"""],
+                      ["name": 'usernameStyle', "value": """USERID"""]]
+    }
+
+    vcsRoot {
+        name = "Gradle Promotion (master)"
+        id = "Gradle_Promotion__master_"
+        parameters = [["name": 'agentCleanFilesPolicy', "value": """ALL_UNTRACKED"""],
+                      ["name": 'agentCleanPolicy', "value": """ON_BRANCH_CHANGE"""],
+                      ["name": 'agentGitPath', "value": """%env.TEAMCITY_GIT_PATH%"""],
+                      ["name": 'authMethod', "value": """PRIVATE_KEY_DEFAULT"""],
+                      ["name": 'branch', "value": """master"""],
+                      ["name": 'ignoreKnownHosts', "value": """true"""],
+                      ["name": 'submoduleCheckout', "value": """CHECKOUT"""],
+                      ["name": 'url', "value": """git@github.com:gradleware/gradle-promote.git"""],
+                      ["name": 'usernameStyle', "value": """USERID"""]]
+    }
+
+    vcsRoot {
+        name = "Gradle pull requests"
+        id = "Gradle_PullRequest_GradleMasterBranch"
+        parameters = [["name": 'agentCleanFilesPolicy', "value": """ALL_UNTRACKED"""],
+                      ["name": 'agentCleanPolicy', "value": """ON_BRANCH_CHANGE"""],
+                      ["name": 'authMethod', "value": """ANONYMOUS"""],
+                      ["name": 'branch', "value": """master"""],
+                      ["name": 'ignoreKnownHosts', "value": """true"""],
+                      ["name": 'submoduleCheckout', "value": """CHECKOUT"""],
+                      ["name": 'teamcity:branchSpec', "value": """+:refs/pull/(*/head)"""],
+                      ["name": 'url', "value": """git://github.com/gradle/gradle.git"""],
+                      ["name": 'usernameStyle', "value": """USERID"""]]
+    }
+
+    vcsRoot {
+        name = "Gradle Release Branch"
+        id = "Gradle_release_branch"
+        parameters = [["name": 'agentCleanFilesPolicy', "value": """ALL_UNTRACKED"""],
+                      ["name": 'agentCleanPolicy', "value": """ON_BRANCH_CHANGE"""],
+                      ["name": 'authMethod', "value": """ANONYMOUS"""],
+                      ["name": 'branch', "value": """release"""],
+                      ["name": 'ignoreKnownHosts', "value": """true"""],
+                      ["name": 'submoduleCheckout', "value": """CHECKOUT"""],
+                      ["name": 'url', "value": """git://github.com/gradle/gradle.git"""],
+                      ["name": 'usernameStyle', "value": """USERID"""]]
+    }
+
+    vcsRoot {
+        name = "Gradle temporary branches"
+        id = "Gradle_PullRequest_GradleTemporaryBranches"
+        parameters = [["name": 'agentCleanFilesPolicy', "value": """ALL_UNTRACKED"""],
+                      ["name": 'agentCleanPolicy', "value": """ON_BRANCH_CHANGE"""],
+                      ["name": 'authMethod', "value": """ANONYMOUS"""],
+                      ["name": 'branch', "value": """dependency-substitution"""],
+                      ["name": 'ignoreKnownHosts', "value": """true"""],
+                      ["name": 'submoduleCheckout', "value": """CHECKOUT"""],
+                      ["name": 'teamcity:branchSpec', "value": """+:refs/heads/(dependency-substitution)
++:refs/heads/(sf-depcache)"""],
+                      ["name": 'url', "value": """git://github.com/gradle/gradle.git"""],
+                      ["name": 'usernameStyle', "value": """USERID"""]]
+    }
+
+    vcsRoot {
+        name = "gradle-mirror publish-plugin branch"
+        id = "Colony_GradleMirrorPublishPlugin"
+        parameters = [["name": 'agentCleanFilesPolicy', "value": """ALL_UNTRACKED"""],
+                      ["name": 'agentCleanPolicy', "value": """ON_BRANCH_CHANGE"""],
+                      ["name": 'authMethod', "value": """PASSWORD"""],
+                      ["name": 'branch', "value": """plugin-publish"""],
+                      ["name": 'ignoreKnownHosts', "value": """true"""],
+                      ["name": 'secure:password', "value": """null"""],
+                      ["name": 'submoduleCheckout', "value": """CHECKOUT"""],
+                      ["name": 'url', "value": """https://gradlewaregitbot@github.com/gradleware/gradle-mirror.git"""],
+                      ["name": 'username', "value": """gradlewaregitbot"""],
+                      ["name": 'usernameStyle', "value": """USERID"""]]
+    }
+
+    vcsRoot {
+        name = "GradleHub All Branches"
+        id = "GradleHub_GradleHubAllBranches"
+        parameters = [["name": 'agentCleanFilesPolicy', "value": """ALL_UNTRACKED"""],
+                      ["name": 'agentCleanPolicy', "value": """ON_BRANCH_CHANGE"""],
+                      ["name": 'authMethod', "value": """PASSWORD"""],
+                      ["name": 'branch', "value": """refs/heads/master"""],
+                      ["name": 'ignoreKnownHosts', "value": """true"""],
+                      ["name": 'secure:password', "value": """null"""],
+                      ["name": 'submoduleCheckout', "value": """CHECKOUT"""],
+                      ["name": 'teamcity:branchSpec', "value": """+:refs/heads/*"""],
+                      ["name": 'url', "value": """https://github.com/gradle/gradlehub.git"""],
+                      ["name": 'username', "value": """gradlewaregitbot"""],
+                      ["name": 'usernameStyle', "value": """USERID"""]]
+    }
+
+    vcsRoot {
+        name = "GradleHub Master"
+        id = "GradleHub_GradleHubMaster"
+        parameters = [["name": 'agentCleanFilesPolicy', "value": """ALL_UNTRACKED"""],
+                      ["name": 'agentCleanPolicy', "value": """ON_BRANCH_CHANGE"""],
+                      ["name": 'authMethod', "value": """PASSWORD"""],
+                      ["name": 'branch', "value": """refs/heads/master"""],
+                      ["name": 'ignoreKnownHosts', "value": """true"""],
+                      ["name": 'secure:password', "value": """null"""],
+                      ["name": 'submoduleCheckout', "value": """CHECKOUT"""],
+                      ["name": 'url', "value": """https://github.com/gradle/gradlehub.git"""],
+                      ["name": 'username', "value": """gradlewaregitbot"""],
+                      ["name": 'usernameStyle', "value": """USERID"""]]
+    }
+
+    vcsRoot {
+        name = "GradleHub Release"
+        id = "GradleHubRelease"
+        parameters = [["name": 'agentCleanFilesPolicy', "value": """ALL_UNTRACKED"""],
+                      ["name": 'agentCleanPolicy', "value": """ON_BRANCH_CHANGE"""],
+                      ["name": 'authMethod', "value": """PASSWORD"""],
+                      ["name": 'branch', "value": """refs/heads/release"""],
+                      ["name": 'ignoreKnownHosts', "value": """true"""],
+                      ["name": 'secure:password', "value": """null"""],
+                      ["name": 'submoduleCheckout', "value": """CHECKOUT"""],
+                      ["name": 'url', "value": """https://github.com/gradle/gradlehub.git"""],
+                      ["name": 'username', "value": """gradlewaregitbot"""],
+                      ["name": 'usernameStyle', "value": """USERID"""]]
+    }
+
+    vcsRoot {
+        name = "GradleHub https-use-repo"
+        id = "GradleHubHttpsUseRepo"
+        parameters = [["name": 'agentCleanFilesPolicy', "value": """ALL_UNTRACKED"""],
+                      ["name": 'agentCleanPolicy', "value": """ON_BRANCH_CHANGE"""],
+                      ["name": 'authMethod', "value": """PASSWORD"""],
+                      ["name": 'branch', "value": """refs/heads/https-use-repo"""],
+                      ["name": 'ignoreKnownHosts', "value": """true"""],
+                      ["name": 'secure:password', "value": """null"""],
+                      ["name": 'submoduleCheckout', "value": """CHECKOUT"""],
+                      ["name": 'teamcity:branchSpec', "value": """+:refs/heads/https-use-repo"""],
+                      ["name": 'url', "value": """https://github.com/gradle/gradlehub.git"""],
+                      ["name": 'username', "value": """gradlewaregitbot"""],
+                      ["name": 'usernameStyle', "value": """USERID"""]]
+    }
+
+    vcsRoot {
+        name = "Gradleware Training Material"
+        id = "Gradleware_Training_Material"
+        parameters = [["name": 'agentCleanFilesPolicy', "value": """ALL_UNTRACKED"""],
+                      ["name": 'agentCleanPolicy', "value": """ON_BRANCH_CHANGE"""],
+                      ["name": 'agentGitPath', "value": """%env.TEAMCITY_GIT_PATH%"""],
+                      ["name": 'authMethod', "value": """PASSWORD"""],
+                      ["name": 'branch', "value": """master"""],
+                      ["name": 'ignoreKnownHosts', "value": """true"""],
+                      ["name": 'secure:password', "value": """null"""],
+                      ["name": 'submoduleCheckout', "value": """CHECKOUT"""],
+                      ["name": 'url', "value": """https://gradlewaregitbot@github.com/gradle/gradle-trainings.git"""],
+                      ["name": 'username', "value": """gradlewaregitbot"""],
+                      ["name": 'usernameStyle', "value": """USERID"""]]
+    }
+
+    vcsRoot {
+        name = "Gradleware Web Master"
+        id = "Gradleware_Web_Master"
+        parameters = [["name": 'agentCleanFilesPolicy', "value": """NON_IGNORED_ONLY"""],
+                      ["name": 'agentCleanPolicy', "value": """ON_BRANCH_CHANGE"""],
+                      ["name": 'authMethod', "value": """PASSWORD"""],
+                      ["name": 'branch', "value": """master"""],
+                      ["name": 'ignoreKnownHosts', "value": """true"""],
+                      ["name": 'secure:password', "value": """null"""],
+                      ["name": 'submoduleCheckout', "value": """CHECKOUT"""],
+                      ["name": 'url', "value": """https://github.com/gradle/web.git"""],
+                      ["name": 'username', "value": """gradlewaregitbot"""],
+                      ["name": 'usernameStyle', "value": """USERID"""]]
+    }
+
+    vcsRoot {
+        name = "Tooling Commons"
+        id = "Tooling_Commons"
+        parameters = [["name": 'agentCleanFilesPolicy', "value": """NON_IGNORED_ONLY"""],
+                      ["name": 'agentCleanPolicy', "value": """ON_BRANCH_CHANGE"""],
+                      ["name": 'authMethod', "value": """PASSWORD"""],
+                      ["name": 'branch', "value": """refs/heads/master"""],
+                      ["name": 'ignoreKnownHosts', "value": """true"""],
+                      ["name": 'secure:password', "value": """null"""],
+                      ["name": 'submoduleCheckout', "value": """CHECKOUT"""],
+                      ["name": 'teamcity:branchSpec', "value": """+:refs/heads/*"""],
+                      ["name": 'url', "value": """https://gradlewaregitbot@github.com/gradle/tooling-commons.git"""],
+                      ["name": 'username', "value": """gradlewaregitbot"""],
+                      ["name": 'usernameStyle', "value": """USERID"""]]
+    }
+
+    vcsRoot {
+        name = "Tooling Commons (promotion)"
+        id = "Tooling_Promotion_Commons_ToolingCommons"
+        parameters = [["name": 'agentCleanFilesPolicy', "value": """ALL_UNTRACKED"""],
+                      ["name": 'agentCleanPolicy', "value": """ON_BRANCH_CHANGE"""],
+                      ["name": 'agentGitPath', "value": """%env.TEAMCITY_GIT_PATH%"""],
+                      ["name": 'authMethod', "value": """PRIVATE_KEY_DEFAULT"""],
+                      ["name": 'branch', "value": """master"""],
+                      ["name": 'ignoreKnownHosts', "value": """true"""],
+                      ["name": 'submoduleCheckout', "value": """CHECKOUT"""],
+                      ["name": 'url', "value": """git@github.com:gradle/tooling-commons.git"""],
+                      ["name": 'usernameStyle', "value": """USERID"""]]
+    }
+
+    vcsRoot {
+        name = "Tooling Eclipse"
+        id = "Tooling_Eclipse_Buildship"
+        parameters = [["name": 'agentCleanFilesPolicy', "value": """NON_IGNORED_ONLY"""],
+                      ["name": 'agentCleanPolicy', "value": """ON_BRANCH_CHANGE"""],
+                      ["name": 'authMethod', "value": """ANONYMOUS"""],
+                      ["name": 'branch', "value": """refs/heads/master"""],
+                      ["name": 'ignoreKnownHosts', "value": """true"""],
+                      ["name": 'submoduleCheckout', "value": """CHECKOUT"""],
+                      ["name": 'teamcity:branchSpec', "value": """+:refs/heads/*"""],
+                      ["name": 'url', "value": """https://github.com/eclipse/buildship.git"""],
+                      ["name": 'usernameStyle', "value": """USERID"""]]
+    }
+
     buildProjec {
         name = "Gradle"
         description = "Gradle Open-Source Project"

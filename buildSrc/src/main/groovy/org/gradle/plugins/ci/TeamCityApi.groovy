@@ -30,11 +30,34 @@ class TeamCityApi {
 
     static applyFromTemplate(TeamCityExtension teamCityExtension) {
 
+        createVcsRoots(teamCityExtension.baseUrl, teamCityExtension.username, teamCityExtension.password, teamCityExtension.vcsRoots)
+
         teamCityExtension.buildProjects.each { BuildProject buildProject ->
             maybeDeleteProject(teamCityExtension.baseUrl, teamCityExtension.username, teamCityExtension.password, buildProject.name)
             createProject(teamCityExtension.baseUrl, teamCityExtension.username, teamCityExtension.password, teamCityExtension.rootProjectId, buildProject)
         }
 
+    }
+
+    static createVcsRoots(String baseUrl, String username, String password, List<GitVcsRoot> vcsRoots) {
+        def client = restClient(baseUrl, username, password)
+        vcsRoots.each { GitVcsRoot gitVcsRoot ->
+            CreateGitVcsRootRequest createGitVcsRootRequest = new CreateGitVcsRootRequest()
+            createGitVcsRootRequest.id = gitVcsRoot.id
+            createGitVcsRootRequest.project = new ParentProject(id: '_root')
+            createGitVcsRootRequest.vcsName = "jetbrains.git"
+            
+            createGitVcsRootRequest.properties = gitVcsRoot.parameters.collect { Map map ->
+                new PropertyTuple(name: map.name, value: map.value)
+            }
+
+            client.post(
+                contentType: APPLICATION_JSON,
+                path: "vcs-roots",
+                headers: httpHeaders,
+                body: JsonOutput.toJson(createGitVcsRootRequest)
+            )
+        }
     }
 
     static createProject(String baseUrl, String username, String password, String parentId, BuildProject buildProject) {

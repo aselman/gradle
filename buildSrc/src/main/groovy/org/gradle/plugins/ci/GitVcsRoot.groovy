@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package org.gradle.plugins.ci;
+package org.gradle.plugins.ci
 
-trait Identity {
+class GitVcsRoot implements Parameterised {
     String name
-    String description
+    String id
 }
